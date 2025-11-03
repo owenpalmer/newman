@@ -7,12 +7,12 @@ class NewmanProjection {
         
         // Configurable settings
         this.settings = {
-            bondThickness: 2,
+            bondThickness: 3.5,
             bondLength: 80,
-            circleRadius: 80,
+            circleRadius: 40,
             backAngle: 30,
             frontAngle: 30,
-            arcThickness: 2,
+            arcThickness: 3.5,
             substituentMargin: 15
         };
         
