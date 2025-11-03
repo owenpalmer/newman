@@ -21,77 +21,20 @@ class NewmanProjection {
         this.frontGroups = ['H', 'H', 'H'];
         this.backGroups = ['H', 'H', 'H'];
         
-        this.setupEventListeners();
         this.draw();
     }
     
-    setupEventListeners() {
-        // Rotation slider
-        const rotationSlider = document.getElementById('rotation');
-        const rotationValue = document.getElementById('rotation-value');
-        
-        rotationSlider.addEventListener('input', (e) => {
-            this.rotation = parseInt(e.target.value);
-            rotationValue.textContent = this.rotation + '°';
+    // Public methods for external updates
+    updateSetting(key, value) {
+        if (this.settings.hasOwnProperty(key)) {
+            this.settings[key] = value;
             this.draw();
-        });
-        
-        // Settings controls
-        this.setupSettingControl('bond-thickness', 'bondThickness');
-        this.setupSettingControl('bond-length', 'bondLength');
-        this.setupSettingControl('circle-radius', 'circleRadius');
-        this.setupSettingControl('back-angle', 'backAngle', '°');
-        this.setupSettingControl('front-angle', 'frontAngle', '°');
-        this.setupSettingControl('arc-thickness', 'arcThickness');
-        this.setupSettingControl('substituent-margin', 'substituentMargin');
-        this.setupSettingControl('font-size', 'fontSize');
-        
-        // Front carbon group inputs
-        ['front1', 'front2', 'front3'].forEach((id, index) => {
-            document.getElementById(id).addEventListener('input', (e) => {
-                this.frontGroups[index] = e.target.value || 'H';
-                this.draw();
-            });
-        });
-        
-        // Back carbon group inputs
-        ['back1', 'back2', 'back3'].forEach((id, index) => {
-            document.getElementById(id).addEventListener('input', (e) => {
-                this.backGroups[index] = e.target.value || 'H';
-                this.draw();
-            });
-        });
+        }
     }
     
-    setupSettingControl(elementId, settingKey, suffix = '') {
-        const slider = document.getElementById(elementId);
-        const numberInput = document.getElementById(elementId + '-input');
-        const valueDisplay = document.getElementById(elementId + '-value');
-        
-        // Handle slider input
-        slider.addEventListener('input', (e) => {
-            this.settings[settingKey] = parseFloat(e.target.value);
-            if (numberInput) numberInput.value = this.settings[settingKey];
-            if (valueDisplay) valueDisplay.textContent = this.settings[settingKey] + suffix;
-            this.draw();
-        });
-        
-        // Handle number input (if it exists)
-        if (numberInput) {
-            numberInput.addEventListener('input', (e) => {
-                const value = parseFloat(e.target.value);
-                if (!isNaN(value)) {
-                    this.settings[settingKey] = value;
-                    slider.value = Math.min(Math.max(value, slider.min), slider.max);
-                    if (valueDisplay) valueDisplay.textContent = this.settings[settingKey] + suffix;
-                    this.draw();
-                }
-            });
-        }
-        
-        // Initialize display
-        if (valueDisplay) valueDisplay.textContent = this.settings[settingKey] + suffix;
-        if (numberInput) numberInput.value = this.settings[settingKey];
+    updateSettings(settingsObject) {
+        Object.assign(this.settings, settingsObject);
+        this.draw();
     }
     
     draw() {
@@ -183,40 +126,112 @@ class NewmanProjection {
         this.ctx.fillText(text, x, y);
     }
     
-    // Method to programmatically set groups
+    // Public methods for external updates (no DOM dependencies)
     setFrontGroups(groups) {
         this.frontGroups = groups;
-        this.updateInputs();
         this.draw();
     }
     
     setBackGroups(groups) {
         this.backGroups = groups;
-        this.updateInputs();
         this.draw();
     }
     
     setRotation(angle) {
         this.rotation = angle;
-        document.getElementById('rotation').value = angle;
-        document.getElementById('rotation-value').textContent = angle + '°';
         this.draw();
     }
     
-    updateInputs() {
-        ['front1', 'front2', 'front3'].forEach((id, index) => {
-            document.getElementById(id).value = this.frontGroups[index];
-        });
-        
-        ['back1', 'back2', 'back3'].forEach((id, index) => {
-            document.getElementById(id).value = this.backGroups[index];
+    setFrontGroup(index, group) {
+        if (index >= 0 && index < 3) {
+            this.frontGroups[index] = group || 'H';
+            this.draw();
+        }
+    }
+    
+    setBackGroup(index, group) {
+        if (index >= 0 && index < 3) {
+            this.backGroups[index] = group || 'H';
+            this.draw();
+        }
+    }
+}
+
+// UI Event Handling Functions (separated from drawing class)
+function setupSettingControl(newman, elementId, settingKey, suffix = '') {
+    const slider = document.getElementById(elementId);
+    const numberInput = document.getElementById(elementId + '-input');
+    const valueDisplay = document.getElementById(elementId + '-value');
+    
+    // Handle slider input
+    slider.addEventListener('input', (e) => {
+        const value = parseFloat(e.target.value);
+        newman.updateSetting(settingKey, value);
+        if (numberInput) numberInput.value = value;
+        if (valueDisplay) valueDisplay.textContent = value + suffix;
+    });
+    
+    // Handle number input (if it exists)
+    if (numberInput) {
+        numberInput.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            if (!isNaN(value)) {
+                newman.updateSetting(settingKey, value);
+                slider.value = Math.min(Math.max(value, slider.min), slider.max);
+                if (valueDisplay) valueDisplay.textContent = value + suffix;
+            }
         });
     }
+    
+    // Initialize display
+    if (valueDisplay) valueDisplay.textContent = newman.settings[settingKey] + suffix;
+    if (numberInput) numberInput.value = newman.settings[settingKey];
+}
+
+function setupRotationControl(newman) {
+    const rotationSlider = document.getElementById('rotation');
+    const rotationValue = document.getElementById('rotation-value');
+    
+    rotationSlider.addEventListener('input', (e) => {
+        const angle = parseInt(e.target.value);
+        newman.setRotation(angle);
+        rotationValue.textContent = angle + '°';
+    });
+}
+
+function setupGroupInputs(newman) {
+    // Front carbon group inputs
+    ['front1', 'front2', 'front3'].forEach((id, index) => {
+        document.getElementById(id).addEventListener('input', (e) => {
+            newman.setFrontGroup(index, e.target.value || 'H');
+        });
+    });
+    
+    // Back carbon group inputs
+    ['back1', 'back2', 'back3'].forEach((id, index) => {
+        document.getElementById(id).addEventListener('input', (e) => {
+            newman.setBackGroup(index, e.target.value || 'H');
+        });
+    });
 }
 
 // Initialize the Newman projection tool when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     const newman = new NewmanProjection('newman-canvas');
+    
+    // Setup UI controls (separated from drawing class)
+    setupRotationControl(newman);
+    setupGroupInputs(newman);
+    
+    // Setup all setting controls
+    setupSettingControl(newman, 'bond-thickness', 'bondThickness');
+    setupSettingControl(newman, 'bond-length', 'bondLength');
+    setupSettingControl(newman, 'circle-radius', 'circleRadius');
+    setupSettingControl(newman, 'back-angle', 'backAngle', '°');
+    setupSettingControl(newman, 'front-angle', 'frontAngle', '°');
+    setupSettingControl(newman, 'arc-thickness', 'arcThickness');
+    setupSettingControl(newman, 'substituent-margin', 'substituentMargin');
+    setupSettingControl(newman, 'font-size', 'fontSize');
     
     // Make it globally accessible for debugging/testing
     window.newman = newman;
