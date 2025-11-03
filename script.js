@@ -119,11 +119,14 @@ class NewmanProjection {
     }
     
     drawGroupLabel(x, y, text) {
-        this.ctx.fillStyle = '#000';
-        this.ctx.font = `${this.settings.fontSize}px Arial`;
-        this.ctx.textAlign = 'center';
-        this.ctx.textBaseline = 'middle';
-        this.ctx.fillText(text, x, y);
+        // Only draw if there's text to display
+        if (text && text.trim() !== '') {
+            this.ctx.fillStyle = '#000';
+            this.ctx.font = `${this.settings.fontSize}px Arial`;
+            this.ctx.textAlign = 'center';
+            this.ctx.textBaseline = 'middle';
+            this.ctx.fillText(text, x, y);
+        }
     }
     
     // Public methods for external updates (no DOM dependencies)
@@ -144,14 +147,14 @@ class NewmanProjection {
     
     setFrontGroup(index, group) {
         if (index >= 0 && index < 3) {
-            this.frontGroups[index] = group || 'H';
+            this.frontGroups[index] = group;
             this.draw();
         }
     }
     
     setBackGroup(index, group) {
         if (index >= 0 && index < 3) {
-            this.backGroups[index] = group || 'H';
+            this.backGroups[index] = group;
             this.draw();
         }
     }
@@ -203,14 +206,14 @@ function setupGroupInputs(newman) {
     // Front carbon group inputs
     ['front1', 'front2', 'front3'].forEach((id, index) => {
         document.getElementById(id).addEventListener('input', (e) => {
-            newman.setFrontGroup(index, e.target.value || 'H');
+            newman.setFrontGroup(index, e.target.value);
         });
     });
     
     // Back carbon group inputs
     ['back1', 'back2', 'back3'].forEach((id, index) => {
         document.getElementById(id).addEventListener('input', (e) => {
-            newman.setBackGroup(index, e.target.value || 'H');
+            newman.setBackGroup(index, e.target.value);
         });
     });
 }
