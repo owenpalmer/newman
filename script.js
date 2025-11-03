@@ -13,7 +13,8 @@ class NewmanProjection {
             backAngle: 30,
             frontAngle: 30,
             arcThickness: 3.5,
-            substituentMargin: 15
+            substituentMargin: 15,
+            fontSize: 14
         };
         
         this.rotation = 0;
@@ -43,6 +44,7 @@ class NewmanProjection {
         this.setupSettingControl('front-angle', 'frontAngle', '°');
         this.setupSettingControl('arc-thickness', 'arcThickness');
         this.setupSettingControl('substituent-margin', 'substituentMargin');
+        this.setupSettingControl('font-size', 'fontSize');
         
         // Front carbon group inputs
         ['front1', 'front2', 'front3'].forEach((id, index) => {
@@ -175,7 +177,7 @@ class NewmanProjection {
     
     drawGroupLabel(x, y, text) {
         this.ctx.fillStyle = '#000';
-        this.ctx.font = '14px Arial';
+        this.ctx.font = `${this.settings.fontSize}px Arial`;
         this.ctx.textAlign = 'center';
         this.ctx.textBaseline = 'middle';
         this.ctx.fillText(text, x, y);
