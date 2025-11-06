@@ -10,14 +10,13 @@ class NewmanProjection {
             bondThickness: 3.5,
             bondLength: 80,
             circleRadius: 40,
-            backAngle: 30,
-            frontAngle: 30,
+            angleOffset: 30,
             arcThickness: 3.5,
             substituentMargin: 15,
             fontSize: 14
         };
         
-        this.rotation = 0;
+        this.rotation = 10;
         this.frontGroups = ['H', 'H', 'H'];
         this.backGroups = ['H', 'H', 'H'];
         
@@ -58,7 +57,7 @@ class NewmanProjection {
         
         // Draw back carbon bonds and groups
         for (let i = 0; i < 3; i++) {
-            const angle = ((i * 120) + this.settings.backAngle) * Math.PI / 180;
+            const angle = ((i * 120) + this.settings.angleOffset) * Math.PI / 180;
             
             // Calculate bond start position on circle edge
             const bondStartX = this.centerX + this.settings.circleRadius * Math.cos(angle);
@@ -88,8 +87,8 @@ class NewmanProjection {
     drawFrontCarbon() {
         // Draw front carbon bonds and groups
         for (let i = 0; i < 3; i++) {
-            // Apply rotation and front angle offset to front carbon groups
-            const angle = ((i * 120) + this.rotation + this.settings.frontAngle) * Math.PI / 180;
+            // Apply rotation and angle offset to front carbon groups
+            const angle = ((i * 120) + this.rotation + this.settings.angleOffset) * Math.PI / 180;
             
             // Calculate bond end position (center + bond length)
             const bondEndX = this.centerX + this.settings.bondLength * Math.cos(angle);
@@ -230,8 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSettingControl(newman, 'bond-thickness', 'bondThickness');
     setupSettingControl(newman, 'bond-length', 'bondLength');
     setupSettingControl(newman, 'circle-radius', 'circleRadius');
-    setupSettingControl(newman, 'back-angle', 'backAngle', '°');
-    setupSettingControl(newman, 'front-angle', 'frontAngle', '°');
+    setupSettingControl(newman, 'angle-offset', 'angleOffset', '°');
     setupSettingControl(newman, 'arc-thickness', 'arcThickness');
     setupSettingControl(newman, 'substituent-margin', 'substituentMargin');
     setupSettingControl(newman, 'font-size', 'fontSize');

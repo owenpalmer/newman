@@ -17,26 +17,28 @@
                 <span id="rotation-value">0°</span>
             </div>
             
-            <div class="canvas-container">
-                <canvas id="newman-canvas" width="400" height="400"></canvas>
-            </div>
-
-            <div class="groups-section">
-                <div class="front-carbon">
-                    <h3>Front Carbon Groups</h3>
-                    <div class="group-inputs">
-                        <label>Group 1: <input type="text" id="front1" value="H" maxlength="10"></label>
-                        <label>Group 2: <input type="text" id="front2" value="H" maxlength="10"></label>
-                        <label>Group 3: <input type="text" id="front3" value="H" maxlength="10"></label>
-                    </div>
+            <div class="main-content">
+                <div class="canvas-container">
+                    <canvas id="newman-canvas" width="400" height="400"></canvas>
                 </div>
-                
-                <div class="back-carbon">
-                    <h3>Back Carbon Groups</h3>
-                    <div class="group-inputs">
-                        <label>Group 1: <input type="text" id="back1" value="H" maxlength="10"></label>
-                        <label>Group 2: <input type="text" id="back2" value="H" maxlength="10"></label>
-                        <label>Group 3: <input type="text" id="back3" value="H" maxlength="10"></label>
+
+                <div class="groups-section">
+                    <div class="front-carbon">
+                        <h3>Front Carbon Groups</h3>
+                        <div class="group-inputs">
+                            <label>Group 1: <input type="text" id="front1" value="H" maxlength="10"></label>
+                            <label>Group 2: <input type="text" id="front2" value="H" maxlength="10"></label>
+                            <label>Group 3: <input type="text" id="front3" value="H" maxlength="10"></label>
+                        </div>
+                    </div>
+                    
+                    <div class="back-carbon">
+                        <h3>Back Carbon Groups</h3>
+                        <div class="group-inputs">
+                            <label>Group 1: <input type="text" id="back1" value="H" maxlength="10"></label>
+                            <label>Group 2: <input type="text" id="back2" value="H" maxlength="10"></label>
+                            <label>Group 3: <input type="text" id="back3" value="H" maxlength="10"></label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,15 +65,9 @@
                     </div>
                     
                     <div class="setting-item">
-                        <label for="back-angle">Back Angle Offset:</label>
-                        <input type="range" id="back-angle" min="0" max="360" value="30" step="15">
-                        <input type="number" id="back-angle-input" min="0" max="360" value="30" step="15">
-                    </div>
-                    
-                    <div class="setting-item">
-                        <label for="front-angle">Front Angle Offset:</label>
-                        <input type="range" id="front-angle" min="0" max="360" value="30" step="15">
-                        <input type="number" id="front-angle-input" min="0" max="360" value="30" step="15">
+                        <label for="angle-offset">Angle Offset:</label>
+                        <input type="range" id="angle-offset" min="0" max="360" value="30" step="15">
+                        <input type="number" id="angle-offset-input" min="0" max="360" value="30" step="15">
                     </div>
                     
                     <div class="setting-item">
